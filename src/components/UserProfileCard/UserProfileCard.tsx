@@ -23,7 +23,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({
           </div>
         )}
         
-        <div>
+        <div className="flex-1">
           <h3 className="text-xl font-bold text-gray-900">{user.name}</h3>
           {showRole && <p className="text-sm font-medium text-indigo-600">{user.role}</p>}
           {showEmail && <p className="text-sm text-gray-500">{user.email}</p>}

@@ -11,11 +11,11 @@ export const ProductDisplay: React.FC<ProductDisplayProps> = ({
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm overflow-hidden bg-white">
       {product.imageUrl && (
-        <div className="h-48 w-full bg-gray-100">
+        <div className="h-32 w-full bg-gray-100 flex item-center justify-center overflow-hidden p-4">
           <img 
             src={product.imageUrl} 
             alt={product.name} 
-            className="w-full h-full object-cover" 
+            className="w-full h-full object-contain" 
           />
         </div>
       )}
