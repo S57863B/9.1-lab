@@ -1,121 +1,89 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import { AlertBox } from './components/AlertBox/alertBox.tsx';
+import { UserProfileCard } from './components/UserProfileCard/UserProfileCard.tsx';
+import { ProductDisplay } from './components/ProductDisplay/ProductDisplay.tsx';
+import type { User, Product } from './types/index.ts';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Mock Data
+const user: User = {
+  id: '1',
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  role: 'Software Engineer',
+  avatarUrl: 'https://i.pravatar.cc/150?u=1'
+};
+
+const product: Product = {
+  id: '1',
+  name: 'Wireless Headphones',
+  price: 199.99,
+  description: 'High-quality wireless headphones with noise cancellation.',
+  imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80',
+  inStock: true
+};
+
+export const App: React.FC = () => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [cartItems, setCartItems] = useState<string[]>([]);
+
+  const handleAddToCart = (productId: string) => {
+    setCartItems([...cartItems, productId]);
+    setShowAlert(true);
+    // Auto-hide alert after 3 seconds
+    setTimeout(() => setShowAlert(false), 3000); 
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto space-y-6">
+        
+        {/* Fixed height wrapper to prevent layout shift when alert appears */}
+        <div className="h-24"> 
+          {showAlert && (
+            <AlertBox
+              type="success"
+              message="Success! Product added to cart."
+              onClose={() => setShowAlert(false)}
+            >
+              <p>You currently have {cartItems.length} item(s) in your cart.</p>
+            </AlertBox>
+          )}
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* User Profile Implementation */}
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Current User</h2>
+            <UserProfileCard
+              user={user}
+              showEmail={true}
+              showRole={true}
+              onEdit={(userId) => alert(`Routing to edit page for user ${userId}`)}
+            >
+              <div className="text-sm text-gray-500">
+                Last login: 2 hours ago
+              </div>
+            </UserProfileCard>
+          </div>
+
+          {/* Product Implementation */}
+          <div>
+             <h2 className="text-xl font-bold text-gray-800 mb-4">Featured Item</h2>
+            <ProductDisplay
+              product={product}
+              showDescription={true}
+              showStockStatus={true}
+              onAddToCart={handleAddToCart}
+            >
+              <div className="text-sm text-gray-500 flex items-center">
+                <span className="mr-2">📦</span> Free shipping available
+              </div>
+            </ProductDisplay>
+          </div>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </div>
+    </div>
+  );
+};
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
-
-export default App
+export default App;
